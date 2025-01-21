@@ -19,3 +19,58 @@ model User {
 
   @@map("users") // Nome da tabela no banco de dados
 }
+
+model Category {
+  id String @id @default(uuid())
+  name String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+
+  @@map("categories")
+  products Product[]
+}
+
+
+model Product {
+  id String @id @default(uuid())
+  name String
+  price Float
+  description String
+  image String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id])
+  items Item[]
+
+  @@map("products")
+}
+
+model Order {
+  id String @id @default(uuid())
+  table Int
+  stauts Boolean @default(false)
+  draft Boolean @default(true)
+  name String?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+
+  items Item[]
+
+  @@map("orders")
+}
+
+model Item {
+  id String @id @default(uuid())
+  amount Int
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+
+ order Order @relation(fields: [orderId], references: [id])
+ orderId String
+ product Product @relation(fields: [productId], references: [id])
+ productId String
+
+  @@map("items")
+}
