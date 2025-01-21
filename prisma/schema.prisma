@@ -7,3 +7,15 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// Criar migration yarn prisma migrate dev
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String 
+  password String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+
+  @@map("users") // Nome da tabela no banco de dados
+}
