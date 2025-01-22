@@ -5,6 +5,9 @@ import {Router} from 'express';
 const router = Router();
 
 // --ROTAS USER--
-router.post('/users', CreateUserController.handle)
+router.post('/users', (request,response): Promise<any> => {
+    return new CreateUserController().handle(request,response)
+})
+
 
 export {router};
