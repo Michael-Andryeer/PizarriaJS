@@ -7,7 +7,7 @@ interface UserRequest {
   password: string;
 }
 
-class CreateUserService {
+export class CreateUserService {
   async execute({ name, email, password }: UserRequest) {
     if (!name || !email || !password) {
       throw new Error('Preencha todos os campos');
@@ -40,5 +40,3 @@ class CreateUserService {
     return user;
   }
 }
-
-export { CreateUserService };

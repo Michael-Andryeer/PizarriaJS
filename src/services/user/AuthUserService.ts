@@ -8,7 +8,7 @@ interface AuthRequest {
   password: string;
 }
 
-class AuthUserService {
+export class AuthUserService {
   async execute({ email, password }: AuthRequest) {
     // verificar se o email existe
     const user = await prisma.user.findFirst({
@@ -49,5 +49,3 @@ class AuthUserService {
     };
   }
 }
-
-export { AuthUserService };

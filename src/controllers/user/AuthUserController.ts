@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { AuthUserService } from '../../services/user/AuthUserService';
 
-class AuthUserController {
+export class AuthUserController {
   async handle(request: Request, response: Response) {
     const { email, password } = request.body;
 
@@ -12,5 +12,3 @@ class AuthUserController {
     return response.json(auth);
   }
 }
-
-export { AuthUserController };

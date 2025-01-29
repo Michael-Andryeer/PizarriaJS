@@ -1,25 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { CreateUserController } from './controllers/user/CreateUserController';
 import { Router } from 'express';
+import { CreateUserController } from './controllers/user/CreateUserController';
 import { AuthUserController } from './controllers/user/AuthUserController';
 import { DetailUserController } from './controllers/user/DetailUserController';
 import { isAuthenticated } from './middlewares/isAuthenticated';
 
-const router = Router();
+export const router = Router();
+
+const createUserController = new CreateUserController();
+const authUserController = new AuthUserController();
+const detailUserController = new DetailUserController();
 
 // --ROTAS USER--
-
-router.post('/users', (request, response): Promise<any> => {
-  return new CreateUserController().handle(request, response);
-});
-
-router.post('/session', (request, response): Promise<any> => {
-  return new AuthUserController().handle(request, response);
-});
-
-// Rota autenticada com middleware
-router.get('/me', isAuthenticated, (request, response): Promise<any> => {
-  return new DetailUserController().handle(request, response);
-});
-
-export { router };
+router.post('/users', createUserController.handle.bind(createUserController));
+router.post('/session', authUserController.handle.bind(authUserController));
+//ROTA AUTENTICADA
+router.get('/me', isAuthenticated, detailUserController.handle.bind(detailUserController));
