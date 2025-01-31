@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 // Interface para a requisição de autenticação
