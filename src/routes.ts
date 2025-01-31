@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import multer from 'multer';
 import { CreateUserController } from './controllers/user/CreateUserController';
 import { AuthUserController } from './controllers/user/AuthUserController';
 import { DetailUserController } from './controllers/user/DetailUserController';
@@ -6,8 +7,12 @@ import { isAuthenticated } from './middlewares/isAuthenticated';
 import { CreateCategoryController } from './controllers/category/CreateCategoryController';
 import { ListCategoryController } from './controllers/category/ListCategoryController';
 import { CreateProductController } from './controllers/product/CreateProductController';
+import uploadConfig from './config/multer';
 
 export const router = Router();
+
+//Configuração do multer
+const upload = multer(uploadConfig.upload('./tmp'));
 
 const createUserController = new CreateUserController();
 const authUserController = new AuthUserController();
@@ -40,6 +45,7 @@ router.get(
 router.post(
   '/product',
   isAuthenticated,
+  upload.single('file'),
   createProductController.handle.bind(createProductController)
 );
 //ROTAs AUTENTICADAS
