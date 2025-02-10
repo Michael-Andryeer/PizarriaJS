@@ -5,16 +5,17 @@ export class ListByCategoryController {
   async handle(request: Request, response: Response) {
     const category_id = request.query.category_id as string; // string
 
-    if (!category_id) {
-      return response.status(400).json({ error: 'Category ID is required' });
-    }
-
     const listByCategory = new listByCategoryService();
 
-    const products = await listByCategory.execute({
-      category_id,
-    });
+    try {
+      const products = await listByCategory.execute({
+        category_id,
+      });
 
-    return response.json(products);
+      return response.json(products);
+    } catch (error) {
+      console.log(error);
+      return response.status(500).json({ error: 'Internal server error' });
+    }
   }
 }
