@@ -10,6 +10,7 @@ import { CreateProductController } from './controllers/product/CreateProductCont
 import uploadConfig from './config/multer';
 import { ListByCategoryController } from './controllers/product/ListByCategoryController';
 import { CreateOrderController } from './controllers/order/CreateOrderController';
+import { RemoveOrderController } from './controllers/order/RemoveOrderController';
 
 export const router = Router();
 
@@ -24,6 +25,7 @@ const listCategoryController = new ListCategoryController();
 const createProductController = new CreateProductController();
 const listByCategoryController = new ListByCategoryController();
 const createOrderController = new CreateOrderController();
+const removeOrderController = new RemoveOrderController();
 
 // --ROTAS USER--
 router.post('/users', createUserController.handle.bind(createUserController));
@@ -61,6 +63,7 @@ router.get(
 
 //--ROTAS ORDER--
 router.post('/order', isAuthenticated, createOrderController.handle.bind(createOrderController));
+router.delete('/order', isAuthenticated, removeOrderController.handle.bind(removeOrderController));
 //--ROTAS ORDER--
 
 //ROTAs AUTENTICADAS
