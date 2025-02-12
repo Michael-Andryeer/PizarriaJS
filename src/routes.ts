@@ -1,16 +1,17 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { CreateUserController } from './controllers/user/CreateUserController';
-import { AuthUserController } from './controllers/user/AuthUserController';
-import { DetailUserController } from './controllers/user/DetailUserController';
-import { isAuthenticated } from './middlewares/isAuthenticated';
+import uploadConfig from './config/multer';
 import { CreateCategoryController } from './controllers/category/CreateCategoryController';
 import { ListCategoryController } from './controllers/category/ListCategoryController';
-import { CreateProductController } from './controllers/product/CreateProductController';
-import uploadConfig from './config/multer';
-import { ListByCategoryController } from './controllers/product/ListByCategoryController';
+import { AddItemController } from './controllers/order/AddItemController';
 import { CreateOrderController } from './controllers/order/CreateOrderController';
 import { RemoveOrderController } from './controllers/order/RemoveOrderController';
+import { CreateProductController } from './controllers/product/CreateProductController';
+import { ListByCategoryController } from './controllers/product/ListByCategoryController';
+import { AuthUserController } from './controllers/user/AuthUserController';
+import { CreateUserController } from './controllers/user/CreateUserController';
+import { DetailUserController } from './controllers/user/DetailUserController';
+import { isAuthenticated } from './middlewares/isAuthenticated';
 
 export const router = Router();
 
@@ -26,7 +27,7 @@ const createProductController = new CreateProductController();
 const listByCategoryController = new ListByCategoryController();
 const createOrderController = new CreateOrderController();
 const removeOrderController = new RemoveOrderController();
-
+const addItemController = new AddItemController();
 // --ROTAS USER--
 router.post('/users', createUserController.handle.bind(createUserController));
 router.post('/session', authUserController.handle.bind(authUserController));
@@ -64,6 +65,7 @@ router.get(
 //--ROTAS ORDER--
 router.post('/order', isAuthenticated, createOrderController.handle.bind(createOrderController));
 router.delete('/order', isAuthenticated, removeOrderController.handle.bind(removeOrderController));
+router.post('/order/add', isAuthenticated, addItemController.handle.bind(addItemController));
 //--ROTAS ORDER--
 
 //ROTAs AUTENTICADAS
