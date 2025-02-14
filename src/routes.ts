@@ -13,6 +13,7 @@ import { AuthUserController } from './controllers/user/AuthUserController';
 import { CreateUserController } from './controllers/user/CreateUserController';
 import { DetailUserController } from './controllers/user/DetailUserController';
 import { isAuthenticated } from './middlewares/isAuthenticated';
+import { SendOrderController } from './controllers/order/SendOrderController';
 
 export const router = Router();
 
@@ -30,6 +31,8 @@ const createOrderController = new CreateOrderController();
 const removeOrderController = new RemoveOrderController();
 const addItemController = new AddItemController();
 const removeItemController = new RemoveItemController();
+const sendOrderController = new SendOrderController();
+
 
 // --ROTAS USER--
 router.post('/users', createUserController.handle.bind(createUserController));
@@ -70,6 +73,7 @@ router.post('/order', isAuthenticated, createOrderController.handle.bind(createO
 router.delete('/order', isAuthenticated, removeOrderController.handle.bind(removeOrderController));
 router.post('/order/add', isAuthenticated, addItemController.handle.bind(addItemController));
 router.delete('/order/remove', isAuthenticated, removeItemController.handle.bind(removeItemController));
+router.put('/order/send', isAuthenticated, sendOrderController.handle.bind(sendOrderController));
 //--ROTAS ORDER--
 
 //ROTAs AUTENTICADAS
