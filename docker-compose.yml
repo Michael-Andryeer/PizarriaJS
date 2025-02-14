@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Serviço da aplicação
+  app:
+    image: node:16 # Imagem do Node.js (substitua conforme necessário)
+    container_name: minha_app
+    working_dir: /app
+    volumes:
+      - .:/app # Monta o diretório atual no container
+      - .env:/app/.env  # Explicitamente mapeia o .env
+    ports:
+      - "3333:3333" # Expõe a porta 3333 da aplicação
+    environment:
+      - DATABASE_HOST=db # Nome do serviço do banco de dados
+      - DATABASE_PORT=5432 # Porta interna do PostgreSQL
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=123456
+      - DATABASE_NAME=pizzaria
+      - PORT=3333
+       - JWT_SECRET=${JWT_SECRET}
+    command: yarn dev # Comando para iniciar a aplicação
+    depends_on:
+      - db # Depende do serviço do banco de dados
+
+  # Serviço do banco de dados PostgreSQL
+  db:
+    image: postgres:13 # Imagem do PostgreSQL
+    container_name: meu_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: pizzaria
+    ports:
+      - "5434:5432" # Expõe a porta 5432 do container como 5434 no host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistência dos dados do banco
+
+# Volume para persistir os dados do PostgreSQL
+volumes:
+  postgres_data:
