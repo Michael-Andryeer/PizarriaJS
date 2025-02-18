@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response} from 'express';
 import 'express-async-errors';
-import { router } from './routes';
 import cors from 'cors';
 import path from 'path';
+import { router } from './routes';
 
 const app = express();
 app.use(express.json());
@@ -12,19 +12,18 @@ app.use(router);
 
 app.use('/files', express.static(path.resolve(__dirname, '..', 'tmp')));
 
-app.use((err: Error, req: Request, res: Response) => {
-  if (err instanceof Error) {
-    res.status(400).json({
-      error: err.message,
+// Middleware de erro simplificado
+app.use((error: Error, request: Request, response: Response) => {
+  if(error instanceof Error) {
+    response.status(400).json({
+      error: error.message
     });
   }
 
-  res.status(500).json({
+  response.status(500).json({
     status: 'error',
-    message: 'Internal server error',
+    message: 'Internal server error'
   });
 });
 
-app.listen(3333, () => {
-  console.log('Servidor rodando na porta 3333');
-});
+app.listen(3333, () => console.log('Servidor rodando na porta 3333'));
