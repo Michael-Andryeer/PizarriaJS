@@ -1,6 +1,7 @@
-import { prisma } from '../../prisma';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { prisma } from '../../prisma';
+import { AuthError } from '../../errors/AuthError';
 
 // Interface para a requisição de autenticação
 interface AuthRequest {
@@ -18,14 +19,14 @@ export class AuthUserService {
     });
 
     if (!user) {
-      throw new Error('Usuário/senha incorretos');
+      throw new AuthError('Credenciais inválidas');
     }
 
     // verificar se a senha está correta
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new Error('Usuário/senha incorretos');
+      throw new AuthError('Credenciais inválidas');
     }
 
     // gerar um token jwt
