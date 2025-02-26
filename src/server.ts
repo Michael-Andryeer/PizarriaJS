@@ -1,4 +1,4 @@
-import express, { Request, Response} from 'express';
+import express, { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import 'express-async-errors';
 import cors from 'cors';
 import path from 'path';
@@ -12,18 +12,21 @@ app.use(router);
 
 app.use('/files', express.static(path.resolve(__dirname, '..', 'tmp')));
 
-// Middleware de erro simplificado
-app.use((error: Error, request: Request, response: Response) => {
+// Middleware de erro corrigido
+const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
   if(error instanceof Error) {
     response.status(400).json({
       error: error.message
     });
+  } else {
+    response.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
   }
+};
 
-  response.status(500).json({
-    status: 'error',
-    message: 'Internal server error'
-  });
-});
+// Usando o middleware de erro
+app.use(errorHandler);
 
 app.listen(3333, () => console.log('Servidor rodando na porta 3333'));

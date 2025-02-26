@@ -9,13 +9,13 @@ const createCategoryController = new CreateCategoryController();
 const listCategoryController = new ListCategoryController();
 
 categoryRouter.post(
-  '/category',
+  '/',
   isAuthenticated,
   createCategoryController.handle.bind(createCategoryController)
 );
 
 categoryRouter.get(
-  '/category',
+  '/',
   isAuthenticated,
   listCategoryController.handle.bind(listCategoryController)
 );

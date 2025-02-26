@@ -1,34 +1,54 @@
 import { Request, Response } from 'express';
 import { CreateProductService } from '../../services/product/CreateProductService';
+import { ProductValidator } from '../../validators/ProductValidator';
 
 export class CreateProductController {
   async handle(request: Request, response: Response) {
     try {
-      const { name, price, description, category_id } = request.body;
+    const { name, price, description, category_id } = request.body;
+    const file = request.file;
 
-      // Validações
-      if (!name) throw new Error('Name is required');
-      if (!price) throw new Error('Price is required');
-      if (!description) throw new Error('Description is required');
-      if (!category_id) throw new Error('Category is required');
-      if (!request.file) throw new Error('Image is required');
+    const errors = [];
+    
+    // validações
+    const nameError = ProductValidator.validateName(name);
+    const priceError = ProductValidator.validatePrice(price);
+    const descriptionError = ProductValidator.validateDescription(description);
+    const categoryError = ProductValidator.validateCategory(category_id);
+    const imageError = ProductValidator.validateImage(file);
 
-      const createProductService = new CreateProductService();
+    if(nameError) errors.push(nameError);
+    if(priceError) errors.push(priceError);
+    if(descriptionError) errors.push(descriptionError);
+    if(categoryError) errors.push(categoryError);
+    if(imageError) errors.push(imageError);
 
-      const product = await createProductService.execute({
-        name,
-        price: parseFloat(price), // Convertendo para float aqui
-        description,
-        banner: request.file.filename,
-        category_id,
-      });
+    if (errors.length > 0) {
+      return response.status(400).json({errors});
+    }
 
-      return response.json(product);
+    const createProductService = new CreateProductService();
+
+    const product = await createProductService.execute({
+      name,
+      price: parseFloat(price),
+      description,
+      banner: file.filename,
+      category_id
+    })
+
+    return response.json(product);
     } catch (error) {
-      return response.status(400).json({
-        error: 'Error creating product',
-        details: error.message,
-      });
+      if (error instanceof Error) {
+        return response.status(400).json({
+          error : error.message
+        });
+      }
+      
+      return response.status(500).json({
+        status: 'error',
+        message: 'Erro interno do servidor'
+      })
     }
   }
 }

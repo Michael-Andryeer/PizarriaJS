@@ -19,13 +19,12 @@ export function isAuthenticated(request: Request, response: Response, next: Next
     // Validar token
     const { sub } = verify(token, process.env.JWT_SECRET) as Payload;
 
-    // Recuperar o id do token e colocar dentro de uma variável user_id no request
     request.user_id = sub;
 
-    next(); // Passa o controle para o próximo middleware ou rota
+    next();   
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
-    response.status(401).json({ message: 'Token inválido ou expirado!' }); // Envia a resposta e encerra a execução
+    response.status(401).json({ message: 'Token inválido ou expirado!' }); 
     return;
   }
 }

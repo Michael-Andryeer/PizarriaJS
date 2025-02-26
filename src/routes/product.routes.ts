@@ -12,14 +12,14 @@ const createProductController = new CreateProductController();
 const listByCategoryController = new ListByCategoryController();
 
 productRouter.post(
-  '/product',
+  '/',
   isAuthenticated,
   upload.single('file'),
   createProductController.handle.bind(createProductController)
 );
 
 productRouter.get(
-  '/category/product',
+  '/category/:category_id',
   isAuthenticated,
   listByCategoryController.handle.bind(listByCategoryController)
 );
