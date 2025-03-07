@@ -57,4 +57,13 @@ export class OrderValidator {
 
         return null;
     }
+
+    static validateItemId(item_id: string): string | null {
+      if (!item_id) return 'ID do item é obrigatório';
+
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(item_id)) return 'ID do item inválido';
+
+      return null;
+    }
   }

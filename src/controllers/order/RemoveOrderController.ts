@@ -1,16 +1,35 @@
 import { Request, Response } from 'express';
 import { RemoveOrderService } from '../../services/order/RemoveOrderService';
+import { OrderValidator } from '../../validators/OrderValidator';
 
 export class RemoveOrderController {
   async handle(request: Request, response: Response) {
-    const order_id = request.query.order_id as string;
+    try {
+      const order_id = request.query.order_id as string
 
-    const removeOrderService = new RemoveOrderService();
+      const orderError = OrderValidator.validateOrderId(order_id);
 
-    const order = await removeOrderService.execute({
-      id: order_id,
-    });
+      if (orderError) {
+        return response.status(400).json({error:orderError})
+      }
 
-    return response.json(order);
-  }
+      const removeOrderService = new RemoveOrderService();
+
+      await removeOrderService.execute({order_id});
+
+      return response.json({message: 'Pedido removido som sucesso!'})
+    } catch (error) {
+      if( error instanceof Error) {
+        return response.status(400).json({
+          error: error.message
+        })
+      }
+
+      return response.status(500).json({
+        status: 'erro',
+        message: 'Erro interno do servidor'
+      })
+    }
+}
+
 }
