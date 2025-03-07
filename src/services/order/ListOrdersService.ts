@@ -1,17 +1,24 @@
 import { prisma } from '../../prisma';
 
 
-export class ListOrdersService {
+export class ListOrdersService{
     async execute(){
         const orders = await prisma.order.findMany({
             where: {
                 draft: false,
-                status: false
+                status: true, // apenas pediddos abertos
             },
-            orderBy: {
+            include:{
+                items:{
+                    include:{
+                        product:true
+                    }
+                }
+            },
+            orderBy:{
                 createdAt: 'desc'
             }
-        })
+        });
         return orders;
     }
 }

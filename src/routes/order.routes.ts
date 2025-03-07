@@ -20,11 +20,11 @@ const listOrdersController = new ListOrdersController();
 const detailOrderController = new DetailOrderController();
 const finishOrderController = new FinishOrderController();
 
-orderRouter.post('/order', isAuthenticated, createOrderController.handle.bind(createOrderController));
+orderRouter.post('/', isAuthenticated, createOrderController.handle.bind(createOrderController));
 orderRouter.delete('/order', isAuthenticated, removeOrderController.handle.bind(removeOrderController));
-orderRouter.post('/order/add', isAuthenticated, addItemController.handle.bind(addItemController));
+orderRouter.post('/add', isAuthenticated, addItemController.handle.bind(addItemController));
 orderRouter.delete('/order/remove', isAuthenticated, removeItemController.handle.bind(removeItemController));
-orderRouter.put('/order/send', isAuthenticated, sendOrderController.handle.bind(sendOrderController));
-orderRouter.get('/orders', isAuthenticated, listOrdersController.handle.bind(listOrdersController));
+orderRouter.put('/send', isAuthenticated, sendOrderController.handle.bind(sendOrderController));
+orderRouter.get('/', isAuthenticated, listOrdersController.handle.bind(listOrdersController));
 orderRouter.get('/order/detail', isAuthenticated, detailOrderController.handle.bind(detailOrderController));
 orderRouter.put('/order/finish', isAuthenticated, finishOrderController.handle.bind(finishOrderController));

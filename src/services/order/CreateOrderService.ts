@@ -1,18 +1,26 @@
 import { prisma } from '../../prisma';
-
-interface OrderRequest {
-  table: number;
-  name: string;
-}
+import { OrderRequest } from '../../@types/order';
 
 export class CreateOrderService {
-  async execute({ table, name }: OrderRequest) {
+  async execute({ table, items }: OrderRequest) {
     const order = await prisma.order.create({
       data: {
-        table: table,
-        name: name,
-      },
+        table: Number(table),
+        status: true,  // true para pedido aberto
+        draft: false,
+        items: {
+          create: items.map(item => ({
+            amount: item.amount,
+            product: {
+              connect: {
+                id: item.product_id
+              }
+            }
+          }))
+        }
+      }
     });
+
     return order;
   }
 }
