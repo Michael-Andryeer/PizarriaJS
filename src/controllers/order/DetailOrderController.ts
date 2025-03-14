@@ -1,16 +1,35 @@
 import {Request,Response} from 'express';
 import { DetailOrderService } from '../../services/order/DetailOrderService';
+import { OrderValidator } from '../../validators/OrderValidator';
 
-export class DetailOrderController{
+
+export class DetailOrderController {
     async handle(request: Request, response: Response){
-        const order_id = request.query.order_id as string;
+        try {
+            const order_id = request.query.order_id as string;
 
-        const detailOrderService = new DetailOrderService();
+            const orderError = OrderValidator.validateOrderId(order_id);
 
-        const orders = await detailOrderService.execute({
-            order_id
-        })
+            if(orderError) return response.status(400).json({error: orderError});
 
-        return response.json(orders);
+            const detailOrderService = new DetailOrderService();
+
+            const order = await detailOrderService.execute({
+                order_id
+            });
+
+            return response.json(order);
+        } catch (error) {
+            if (error instanceof Error) {
+                return response.status(400).json({
+                    error: error.message
+                });
+            }
+
+            return response.status(500).json({
+                status: 'error',
+                message: 'Erro interno do servidor'
+            });
+        }
     }
 }

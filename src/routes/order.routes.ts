@@ -26,7 +26,7 @@ orderRouter.post('/add', isAuthenticated, addItemController.handle.bind(addItemC
 orderRouter.delete('/item/remove', isAuthenticated, removeItemController.handle.bind(removeItemController));
 orderRouter.put('/send', isAuthenticated, sendOrderController.handle.bind(sendOrderController));
 orderRouter.get('/', isAuthenticated, listOrdersController.handle.bind(listOrdersController));
-orderRouter.get('/order/detail', isAuthenticated, detailOrderController.handle.bind(detailOrderController));
+orderRouter.get('/detail', isAuthenticated, detailOrderController.handle.bind(detailOrderController));
 orderRouter.put('/finish', isAuthenticated, finishOrderController.handle.bind(finishOrderController));
 
 // Validar finalização do pedido!
