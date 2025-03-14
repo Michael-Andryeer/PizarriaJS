@@ -13,3 +13,9 @@ export interface OrderItem {
     product_id: string;
     amount: number;
   }
+
+  export interface ListOrdersRequest {
+    status?: boolean;
+    page?: number;
+    limit?: number;
+  }
