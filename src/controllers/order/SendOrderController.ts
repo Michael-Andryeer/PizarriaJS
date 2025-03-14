@@ -3,33 +3,38 @@ import { SendOrderService } from '../../services/order/SendOrderService';
 import { OrderValidator } from '../../validators/OrderValidator';
 
 export class SendOrderController {
-    async handle(request: Request, response: Response){
-        try {
-            const {order_id} = request.body;
+  async handle(request: Request, response: Response) {
+    try {
+      const { order_id } = request.body;
 
-            const orderError = OrderValidator.validateOrderId(order_id);
+      // Validação do ID do pedido
+      const orderError = OrderValidator.validateOrderId(order_id);
+      
+      if (orderError) {
+        return response.status(400).json({
+          error: orderError
+        });
+      }
 
-            if (orderError) {
-                return response.status(400).json({
-                    error: orderError
-                });
-            }
+      const sendOrderService = new SendOrderService();
+      
+      const order = await sendOrderService.execute({
+        order_id
+      });
 
-            const sendOrderService = new SendOrderService();
+      return response.json(order);
 
-            const order = await sendOrderService.execute({order_id});
+    } catch (error) {
+      if (error instanceof Error) {
+        return response.status(400).json({
+          error: error.message
+        });
+      }
 
-            return response.json(order);
-        } catch(error) {
-            if (error instanceof Error) {
-                return response.status(400).json({
-                    error: error.message
-                })
-            }
-            return response.status(500).json({
-                status: 'error',
-                message: 'Erro interno do servidor'
-            })
-        }
+      return response.status(500).json({
+        status: 'error',
+        message: 'Erro interno do servidor'
+      });
     }
+  }
 }
