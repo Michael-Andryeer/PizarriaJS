@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  url      = env("DATABASE_URL")
+  provider      = "prisma-client-js"
+  url           = env("DATABASE_URL")
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
@@ -34,7 +35,7 @@ model Product {
   name        String
   price       Float
   description String
-  banner       String
+  banner      String
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @default(now())
   category_id String
