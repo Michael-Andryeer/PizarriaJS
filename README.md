@@ -1,18 +1,21 @@
 # PizzariaJS
 
-PizzariaJS é uma API para gerenciar pedidos de uma pizzaria, desenvolvida com **Node.js** e **Express**. O objetivo do projeto é fornecer uma experiência moderna e eficiente para os clientes e para a equipe da pizzaria.
+PizzariaJS é um sistema para gerenciar pedidos de uma pizzaria, desenvolvido com **Next.js** no frontend e **Node.js** com **Express** no backend. O objetivo do projeto é fornecer uma experiência moderna e eficiente para os clientes e para a equipe da pizzaria.
 
 ## 🚀 Funcionalidades
 
-- **Gerenciamento de Pedidos**: Permite que os clientes façam pedidos de pizzas personalizadas através de endpoints da API.
-- **Integração com Banco de Dados**: Armazena e gerencia dados de pedidos, clientes e produtos.
-- **API RESTful**: Estruturada em Node.js com rotas REST para manipulação de dados.
+- **Gerenciamento de Pedidos**: Permite que os clientes façam pedidos de pizzas personalizadas.
+- **Interface Responsiva**: Desenvolvido para funcionar perfeitamente em dispositivos móveis, tablets e desktops.
+- **Integração com Backend**: Comunicação fluida entre o frontend e backend para processar pedidos em tempo real.
+- **API RESTful**: Backend estruturado em Node.js com rotas REST para manipulação de dados.
 
 ## 🛠️ Tecnologias Utilizadas
 
+- **Frontend**: [Next.js](https://nextjs.org/)
 - **Backend**: [Node.js](https://nodejs.org/) e [Express](https://expressjs.com/)
 - **Gerenciador de Pacotes**: Yarn ou NPM
-- **Banco de Dados**: PostgreSQL (ou outro banco de dados de sua escolha)
+- **Estilização**: Pode incluir CSS Modules, Tailwind CSS ou outra biblioteca (dependendo da sua escolha)
+- **Banco de Dados** (opcional, caso esteja utilizando): MySQL, MongoDB ou outro.
 
 ## 📦 Como Rodar o Projeto
 
@@ -29,23 +32,23 @@ PizzariaJS é uma API para gerenciar pedidos de uma pizzaria, desenvolvida com *
    npm install
    ```
 
-3. Configure as variáveis de ambiente no arquivo `.env`:
-   ```properties
-   JWT_SECRET=your_secret_key
-   DATABASE_URL=postgresql://postgres:123456@db:5432/pizzaria
-   ```
-
-4. Inicie o servidor backend:
+3. Inicie o servidor backend:
    ```bash
+   cd backend
    yarn start
-   # ou
-   npm start
    ```
 
-5. Acesse a API no endereço: `http://localhost:3000`
+4. Inicie o servidor frontend:
+   ```bash
+   cd frontend
+   yarn dev
+   ```
+
+5. Acesse no navegador: `http://localhost:3000`
 
 ## 🌟 Futuras Melhorias
 
-- Implementação de uma interface gráfica com **Next.js**.
-- Adição de autenticação e autorização.
-- Melhorias na documentação da API.
+- Integração com meios de pagamento online.
+- Dashboard para a equipe da pizzaria gerenciar os pedidos.
+- Sistema de autenticação para clientes.
+- Adicionar suporte para múltiplos idiomas.
