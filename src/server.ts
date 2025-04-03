@@ -1,6 +1,6 @@
-import express, { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
-import 'express-async-errors';
 import cors from 'cors';
+import express, { ErrorRequestHandler } from 'express';
+import 'express-async-errors';
 import path from 'path';
 import { router } from './routes';
 
@@ -29,4 +29,4 @@ const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
 // Usando o middleware de erro
 app.use(errorHandler);
 
-app.listen(3333, () => console.log('Servidor rodando na porta 3333'));
+app.listen(3333, () => console.log('Server is running on port 3333'));
