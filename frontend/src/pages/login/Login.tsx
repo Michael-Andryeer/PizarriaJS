@@ -10,20 +10,18 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [loading,setLoading] = useState(false)
+
  async function handleLogin(event:FormEvent) {
   event.preventDefault()
   
   const data = {
-    email: "teste@teste.com",
-    password: "123"
+    email,
+    password
    }
 
    await signIn(data)
  }
-
- 
-
- 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#D35400] to-[#E67E22] flex items-center justify-center p-4">

@@ -28,8 +28,8 @@ export function AuthProvider({children}: AuthProviderProps) {
   const isAuthenticated = !!user // Converte a variavel do user em booleano, se estiver vazio vai converter para false
 
 
-  async function signIn() {
-    alert('Login realizado com sucesso!')
+  async function signIn({email,password}: SignInProps)  {
+    console.log(email,password)
   }
 
   return (
