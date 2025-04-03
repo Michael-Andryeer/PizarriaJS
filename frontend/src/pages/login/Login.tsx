@@ -1,13 +1,12 @@
 import { Pizza } from 'lucide-react';
 import React, { useState } from 'react';
 
-function App() {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
   };
 
   return (
@@ -19,7 +18,7 @@ function App() {
             <Pizza className="h-8 w-8 text-white" />
             <h1 className="text-3xl font-bold text-white">PizzariaJS</h1>
           </div>
-        </div>
+        </div> 
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -54,7 +53,7 @@ function App() {
           </button>
 
           <p className="text-center">
-            <a href="#" className="text-gray-400 hover:text-white text-sm">
+            <a href="/register" className="text-gray-400 hover:text-white text-sm">
               Registre minha empresa
             </a>
           </p>
@@ -64,4 +63,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;
