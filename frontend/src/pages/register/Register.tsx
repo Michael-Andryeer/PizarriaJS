@@ -8,9 +8,14 @@ export function Register() {
   const [name, setName] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+ async function handleSignUp(event: React.FormEvent) {
+    event.preventDefault();
+
+    if (!email || !password || !name) {
+      alert('Preencha todos os campos');
+      return;
+    }
+ }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#D35400] to-[#E67E22] flex items-center justify-center p-4">
@@ -25,7 +30,7 @@ export function Register() {
         </div>
 
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 shadow-xl ring-1 ring-white/20">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSignUp} className="space-y-6">
             <div className="space-y-2">
               <h2 className="text-xl font-semibold text-white">Criar nova conta</h2>
               <p className="text-sm text-white/80">Registre sua empresa na plataforma</p>

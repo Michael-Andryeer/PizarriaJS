@@ -1,35 +1,42 @@
-import axios, {AxiosError} from 'axios';
-import {parseCookies} from 'nookies';
+import axios, { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
 import { AuthTokenError } from './errors/AuthTokenError';
-import { signOut } from '../contexts/AuthContext';
 
- function setupAPIClient(ctx = undefined) {
-  const cookies = parseCookies(ctx);
+// Função para fazer logout (não pode usar useNavigate aqui)
+function handleSignOut() {
+  Cookies.remove('token');
+  window.location.href = '/';
+}
+
+function setupAPIClient(ctx = undefined) {
+  const token = Cookies.get('token');
 
   const api = axios.create({
     baseURL: 'http://localhost:3333',
     headers: {
-      Authorization: `Bearer ${cookies['token']}`,
+      Authorization: token ? `Bearer ${token}` : '',
     },
-  })
+  });
 
- api.interceptors.response.use (response => {
-  return response;
- }, (error: AxiosError) => {
-  if ( error.response && error.response.status === 401) {
-    // Deslogar o usuário
-
-    if (typeof window !== "undefined" ) {
-      //chamar função para logout
-      signOut();
-    } else {
-      return Promise.reject(new AuthTokenError())
+  api.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error: AxiosError) => {
+      if (error.response && error.response.status === 401) {
+        // Deslogar o usuário
+        if (typeof window !== "undefined") {
+          // chamar função para logout
+          handleSignOut();
+        } else {
+          return Promise.reject(new AuthTokenError());
+        }
+      }
+      return Promise.reject(error);
     }
-  }
-  return Promise.reject(error);
- }) 
+  );
 
- return api;
+  return api;
 }
 
 export { setupAPIClient };

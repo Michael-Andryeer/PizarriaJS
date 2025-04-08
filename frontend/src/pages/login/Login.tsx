@@ -14,6 +14,13 @@ function Login() {
 
  async function handleLogin(event:FormEvent) {
   event.preventDefault()
+
+  if(!email || !password) {
+    alert('Preencha todos os campos')
+    return;
+  }
+
+  setLoading(true)
   
   const data = {
     email,
@@ -21,6 +28,8 @@ function Login() {
    }
 
    await signIn(data)
+
+   setLoading(false)
  }
 
   return (
