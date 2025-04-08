@@ -1,8 +1,10 @@
 import { Building2, Lock, Mail, Pizza } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export function Register() {
+  const {signUp} = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -15,6 +17,14 @@ export function Register() {
       alert('Preencha todos os campos');
       return;
     }
+
+    const data = {
+      name,
+      email,
+      password
+    }
+
+    await signUp(data);
  }
 
   return (

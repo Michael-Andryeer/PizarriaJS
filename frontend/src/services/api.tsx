@@ -14,7 +14,8 @@ function setupAPIClient(ctx = undefined) {
   const api = axios.create({
     baseURL: 'http://localhost:3333',
     headers: {
-      Authorization: token ? `Bearer ${token}` : '',
+      'Content-Type': 'application/json',  // Adicionando Content-Type explicitamente
+      'Authorization': token ? `Bearer ${token}` : '',
     },
   });
 

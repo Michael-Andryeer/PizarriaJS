@@ -2,12 +2,14 @@ import { createContext, ReactNode, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/apiClient';
+import axios from 'axios';
 
 type AuthContextData = {
   user: UserProps | undefined;
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
   signOut: () => void;
+  signUp: (credentials: SignUpProps) => Promise<void>;
 }
 
 type UserProps = {
@@ -20,6 +22,11 @@ type SignInProps = {
   email: string,
   password: string,
 }
+
+type SignUpProps = {
+  name: string,
+  email: string,
+  password: string,}
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -74,8 +81,52 @@ export function AuthProvider({children}: AuthProviderProps) {
     }
   }
 
+  async function signUp({ name, email, password }: SignUpProps) {
+    try {
+      if (password.length < 8) {
+        alert("A senha deve ter pelo menos 8 caracteres");
+        return;
+      }
+      
+      if (!email.includes('@')) {
+        alert("Por favor, insira um e-mail válido");
+        return;
+      }
+      
+      if (!name.trim()) {
+        alert("O nome é obrigatório");
+        return;
+      }
+  
+      // Fazer a requisição
+      const response = await api.post('/users', {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        password
+      });
+  
+      // Tratar sucesso
+      alert('Usuário cadastrado com sucesso!');
+      navigate('/');
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        // Tratamento específico para erros de validação do servidor
+        if (error.response.data.errors) {
+          const errorMessages = error.response.data.errors.join('\n');
+          alert(`Por favor, corrija os seguintes erros:\n${errorMessages}`);
+        } else {
+          // Outros erros do servidor com mensagem
+          alert(`Não foi possível criar a conta: ${error.response.data.error || 'Verifique seus dados'}`);
+        }
+      } else {
+        // Erros genéricos ou de rede
+        alert('Erro ao cadastrar. Verifique sua conexão e tente novamente.');
+      }
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut} as AuthContextData}>
+    <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut,signUp} as AuthContextData}>
       {children}
     </AuthContext.Provider>
   );
