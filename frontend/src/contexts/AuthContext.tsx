@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/apiClient';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 type AuthContextData = {
   user: UserProps | undefined;
@@ -26,7 +27,8 @@ type SignInProps = {
 type SignUpProps = {
   name: string,
   email: string,
-  password: string,}
+  password: string,
+}
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -36,7 +38,7 @@ export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({children}: AuthProviderProps) {
   const [user, setUser] = useState<UserProps | undefined>(undefined);
-  const isAuthenticated = !!user; // Converte a variável do user em booleano
+  const isAuthenticated = !!user;
   const navigate = useNavigate();
 
   function signOut() {
@@ -44,8 +46,9 @@ export function AuthProvider({children}: AuthProviderProps) {
       Cookies.remove('token');
       setUser(undefined);
       navigate('/');
+      toast.success('Logout realizado com sucesso!');
     } catch {
-      console.log('Erro ao deslogar');
+      toast.error('Erro ao deslogar');
     }
   }
 
@@ -58,9 +61,8 @@ export function AuthProvider({children}: AuthProviderProps) {
 
       const {id, name, token} = response.data;
 
-      // Salvar o token nos cookies
       Cookies.set('token', token, {
-        expires: 30, // 30 dias
+        expires: 30,
         path: '/'
       });
 
@@ -70,63 +72,60 @@ export function AuthProvider({children}: AuthProviderProps) {
         email,
       });
 
-      // Configurar o token para as requisições futuras
       api.defaults.headers.Authorization = `Bearer ${token}`;
 
-      // Redirecionar o usuário para a página de dashboard
+      toast.success(`Bem-vindo(a), ${name}!`);
       navigate('/dashboard');
-
     } catch (error) {
-      console.log('Erro ao acessar', error);
+      toast.error('Falha no login. Verifique seus dados.');
     }
   }
 
   async function signUp({ name, email, password }: SignUpProps) {
     try {
       if (password.length < 8) {
-        alert("A senha deve ter pelo menos 8 caracteres");
+        toast.warning("A senha deve ter pelo menos 8 caracteres");
         return;
       }
       
       if (!email.includes('@')) {
-        alert("Por favor, insira um e-mail válido");
+        toast.warning("Por favor, insira um e-mail válido");
         return;
       }
       
       if (!name.trim()) {
-        alert("O nome é obrigatório");
+        toast.warning("O nome é obrigatório");
         return;
       }
   
-      // Fazer a requisição
       const response = await api.post('/users', {
         name: name.trim(),
         email: email.trim().toLowerCase(),
         password
       });
   
-      // Tratar sucesso
-      alert('Usuário cadastrado com sucesso!');
+      toast.success('Conta criada com sucesso!');
       navigate('/');
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        // Tratamento específico para erros de validação do servidor
         if (error.response.data.errors) {
-          const errorMessages = error.response.data.errors.join('\n');
-          alert(`Por favor, corrija os seguintes erros:\n${errorMessages}`);
+          const errorMessages = error.response.data.errors;
+          
+          // Mostrar cada erro como um toast separado
+          errorMessages.forEach((msg: string) => {
+            toast.error(msg);
+          });
         } else {
-          // Outros erros do servidor com mensagem
-          alert(`Não foi possível criar a conta: ${error.response.data.error || 'Verifique seus dados'}`);
+          toast.error(error.response.data.error || 'Não foi possível criar a conta');
         }
       } else {
-        // Erros genéricos ou de rede
-        alert('Erro ao cadastrar. Verifique sua conexão e tente novamente.');
+        toast.error('Erro ao cadastrar. Verifique sua conexão.');
       }
     }
   }
 
   return (
-    <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut,signUp} as AuthContextData}>
+    <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut, signUp}}>
       {children}
     </AuthContext.Provider>
   );
